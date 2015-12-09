@@ -101,7 +101,7 @@ class MongoStorage
       'metadata.container': container
     , (err, files) ->
       return callback err, files
-  
+
   removeFile: (container, filename, callback) ->
     @db.collection 'fs.files'
     .remove
@@ -132,6 +132,7 @@ class MongoStorage
       gfs = Grid self.db, mongodb
       read = gfs.createReadStream
         _id: file._id
+      res.set 'Cache-Control', 'public, max-age=86400000'
       res.set 'Content-Disposition', "attachment; filename=\"#{file.filename}\""
       res.set 'Content-Type', file.metadata.mimetype
       res.set 'Content-Length', file.length
